@@ -31,7 +31,7 @@ Culling_Mode Renderer::culling_mode = CW;
 
 Shading_Mode Renderer::shading_mode = FLAT;
 
-Depth_Mode Renderer::depth_mode = LESS;
+Depth_Mode Renderer::depth_mode = ALWAYS;
 
 GLfloat Renderer::rotate_value = 0;
 
@@ -64,62 +64,97 @@ void Renderer::nanogui_init(GLFWwindow *window) {
 
     // Create nanogui gui
     bool enabled = true;
-    FormHelper *gui_1 = new FormHelper(screen);
-    FormHelper *gui_2 = new FormHelper(screen);
-    ref<Window> nanoguiWindow_1 = gui_1->addWindow(Eigen::Vector2i(0, 0), "Model & Camera");
-    ref<Window> nanoguiWindow_2 = gui_2->addWindow(Eigen::Vector2i(190, 0), "Light");
+//    FormHelper *gui_1 = new FormHelper(screen);
+//    FormHelper *gui_2 = new FormHelper(screen);
+    FormHelper *gui_3 = new FormHelper(screen);
+    FormHelper *gui_4 = new FormHelper(screen);
+    FormHelper *gui_5 = new FormHelper(screen);
+//    ref<Window> nanoguiWindow_1 = gui_1->addWindow(Eigen::Vector2i(0, 0), "Model & Camera");
+//    ref<Window> nanoguiWindow_2 = gui_2->addWindow(Eigen::Vector2i(200, 0), "Light");
+    ref<Window> nanoguiWindow_3 = gui_3->addWindow(Eigen::Vector2i(0, 0), "BlendShape 1");
+    ref<Window> nanoguiWindow_4 = gui_4->addWindow(Eigen::Vector2i(165, 0), "BlendShape 2");
+    ref<Window> nanoguiWindow_5 = gui_5->addWindow(Eigen::Vector2i(330, 0), "BlendShape 3");
 
-    gui_1->addGroup("Load SMPL");
-    gui_1->addButton("Generate", []() {is_reload_model = true;});
+//    gui_1->addGroup("Load SMPL");
+//    gui_1->addButton("Generate", []() {is_reload_model = true;});
+//
+//    gui_1->addGroup("Position");
+//    gui_1->addVariable("X", camera.Position[0])->setSpinnable(true);
+//    gui_1->addVariable("Y", camera.Position[1])->setSpinnable(true);
+//    gui_1->addVariable("Z", camera.Position[2])->setSpinnable(true);
+//
+//    gui_1->addGroup("Rotate");
+//    gui_1->addVariable("Rotate value", rotate_value)->setSpinnable(true);
+//    gui_1->addButton("Rotate right+", []() { camera.rotate_x(glm::radians(rotate_value));  });
+//    gui_1->addButton("Rotate right-", []() { camera.rotate_x(glm::radians(-rotate_value));  });
+//    gui_1->addButton("Rotate up+", []() { camera.rotate_y(glm::radians(rotate_value));  });
+//    gui_1->addButton("Rotate up-", []() { camera.rotate_y(glm::radians(-rotate_value));  });
+//    gui_1->addButton("Rotate front+", []() { camera.rotate_z(glm::radians(rotate_value));  });
+//    gui_1->addButton("Rotate front-", []() { camera.rotate_z(glm::radians(-rotate_value));  });
+//
+//    gui_1->addGroup("Configuration");
+//    gui_1->addVariable("z near", z_near)->setSpinnable(true);
+//    gui_1->addVariable("z far", z_far)->setSpinnable(true);
+//    gui_1->addVariable("Render type", object_mode, enabled)->setItems({ "Point", "Line", "Triangle" });
+//    gui_1->addVariable("Culling type", culling_mode, enabled)->setItems({ "CW", "CCW" });
+//    gui_1->addVariable("Shading type", shading_mode, enabled)->setItems({ "FLAT", "SMOOTH" });
+//    gui_1->addVariable("Depth type", depth_mode, enabled)->setItems({ "LESS", "ALWAYS" });
+//
+//    gui_1->addButton("Reset Camera", []() {
+//        camera.reset();
+//    });
 
-    gui_1->addGroup("Position");
-    gui_1->addVariable("X", camera.Position[0])->setSpinnable(true);
-    gui_1->addVariable("Y", camera.Position[1])->setSpinnable(true);
-    gui_1->addVariable("Z", camera.Position[2])->setSpinnable(true);
+//    gui_2->addGroup("Lighting");
+//    gui_2->addVariable("Object color:", main_object.object_color);
+//    gui_2->addVariable("Object shininess", main_object.shininess);
+//
+//    gui_2->addVariable("Direction light status:", lightings.direction_light.status);
+//    gui_2->addVariable("Direction light ambient color:", lightings.direction_light.ambient);
+//    gui_2->addVariable("Direction light diffuse color:", lightings.direction_light.diffuse);
+//    gui_2->addVariable("Direction light specular color:", lightings.direction_light.specular);
+//
+//
+//    gui_2->addVariable("Point light status:", lightings.point_light.status);
+//    gui_2->addVariable("Point light ambient color:", lightings.point_light.ambient);
+//    gui_2->addVariable("Point light diffuse color:", lightings.point_light.diffuse);
+//    gui_2->addVariable("Point light specular color:", lightings.point_light.specular);
+//
+//    gui_2->addVariable("Point light rotate on X", is_dynamic_light_rotate_x);
+//    gui_2->addVariable("Point light rotate on Y", is_dynamic_light_rotate_y);
+//    gui_2->addVariable("Point light rotate on Z", is_dynamic_light_rotate_z);
+//
+//    gui_2->addButton("Reset Point light", []() {
+//        lightings.point_light.position = camera.Position;
+//    });
 
-    gui_1->addGroup("Rotate");
-    gui_1->addVariable("Rotate value", rotate_value)->setSpinnable(true);
-    gui_1->addButton("Rotate right+", []() { camera.rotate_x(glm::radians(rotate_value));  });
-    gui_1->addButton("Rotate right-", []() { camera.rotate_x(glm::radians(-rotate_value));  });
-    gui_1->addButton("Rotate up+", []() { camera.rotate_y(glm::radians(rotate_value));  });
-    gui_1->addButton("Rotate up-", []() { camera.rotate_y(glm::radians(-rotate_value));  });
-    gui_1->addButton("Rotate front+", []() { camera.rotate_z(glm::radians(rotate_value));  });
-    gui_1->addButton("Rotate front-", []() { camera.rotate_z(glm::radians(-rotate_value));  });
+//    gui_3->addGroup("Shape");
+//    double shape = 1.0;
+//    gui_3->addVariable("s1", shape)->setSpinnable(true);
+    gui_3->addGroup("Pose");
+    for (int i = 0; i < 33; ++i) {
+        gui_3->addVariable(std::to_string(i + 1), obj_loader.pose_set[i])->setSpinnable(true);
+    }
 
-    gui_1->addGroup("Configuration");
-    gui_1->addVariable("z near", z_near)->setSpinnable(true);
-    gui_1->addVariable("z far", z_far)->setSpinnable(true);
-    gui_1->addVariable("Render type", object_mode, enabled)->setItems({ "Point", "Line", "Triangle" });
-    gui_1->addVariable("Culling type", culling_mode, enabled)->setItems({ "CW", "CCW" });
-    gui_1->addVariable("Shading type", shading_mode, enabled)->setItems({ "FLAT", "SMOOTH" });
-    gui_1->addVariable("Depth type", depth_mode, enabled)->setItems({ "LESS", "ALWAYS" });
+    gui_4->addGroup("Pose");
+    for (int i = 33; i < 66; ++i) {
+        gui_4->addVariable(std::to_string(i + 1), obj_loader.pose_set[i])->setSpinnable(true);
+    }
 
-    gui_1->addButton("Reset Camera", []() {
-        camera.reset();
+    gui_5->addGroup("Pose");
+    for (int i = 66; i < 78; ++i) {
+        gui_5->addVariable(std::to_string(i + 1), obj_loader.pose_set[i])->setSpinnable(true);
+    }
+    gui_5->addGroup("Random");
+    gui_5->addButton("Random Pose", [this]() {
+        obj_loader.get_ran_pose();
+        int len = sizeof(obj_loader.pose_set) / sizeof(obj_loader.pose_set[0]);
+        for (int i = 0; i < len; ++i) {
+            std::cout << obj_loader.pose_set[i] << " ";
+        }
+        std::cout << std::endl;
     });
-
-    gui_2->addGroup("Lighting");
-    gui_2->addVariable("Object color:", main_object.object_color);
-    gui_2->addVariable("Object shininess", main_object.shininess);
-
-    gui_2->addVariable("Direction light status:", lightings.direction_light.status);
-    gui_2->addVariable("Direction light ambient color:", lightings.direction_light.ambient);
-    gui_2->addVariable("Direction light diffuse color:", lightings.direction_light.diffuse);
-    gui_2->addVariable("Direction light specular color:", lightings.direction_light.specular);
-
-
-    gui_2->addVariable("Point light status:", lightings.point_light.status);
-    gui_2->addVariable("Point light ambient color:", lightings.point_light.ambient);
-    gui_2->addVariable("Point light diffuse color:", lightings.point_light.diffuse);
-    gui_2->addVariable("Point light specular color:", lightings.point_light.specular);
-
-    gui_2->addVariable("Point light rotate on X", is_dynamic_light_rotate_x);
-    gui_2->addVariable("Point light rotate on Y", is_dynamic_light_rotate_y);
-    gui_2->addVariable("Point light rotate on Z", is_dynamic_light_rotate_z);
-
-    gui_2->addButton("Reset Point light", []() {
-        lightings.point_light.position = camera.Position;
-    });
+    gui_5->addGroup("Load SMPL");
+    gui_5->addButton("Generate", []() {is_reload_model = true;});
 
     screen->setVisible(true);
     screen->performLayout();

@@ -91,7 +91,7 @@ private:
         GLint success;
         GLchar info_log[1024];
         if (type == "PROGRAM") {
-            glGetShaderiv(shader, GL_LINK_STATUS, &success);
+            glGetProgramiv(shader, GL_LINK_STATUS, &success);
             if (!success) {
                 glGetShaderInfoLog(shader, 1024, NULL, info_log);
                 std::cout << "| Error:: PROGRAM-LINKING-ERROR of type: " << type << "|\n" << info_log << "\n| -- --------------------------------------------------- -- |\n";

@@ -2,6 +2,8 @@
 // Created by Zheheng Zhao on 3/17/19.
 //
 
+#include <random>
+
 #include "Obj_Loader.h"
 
 #include "Load_SMPL.h"
@@ -41,7 +43,7 @@ Obj_Loader::~Obj_Loader() {
 void Obj_Loader::load_obj() {
     smpl_model model;
     handmodel hand_l, hand_r;
-    loadModel(model, hand_l, hand_r);
+    loadModel(model, hand_l, hand_r, pose_set);
 
     this->vertices.clear();
     std::vector<glm::vec3> positions;
@@ -132,6 +134,21 @@ void Obj_Loader::draw_object(Shader &shader, Object_Mode render_mode, Culling_Mo
     }
 
     glBindVertexArray(0);
+}
+
+void Obj_Loader::get_ran_pose() {
+    int len = sizeof(pose_set) / sizeof(pose_set[0]);
+
+    //normal distribution random
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine generator (seed);
+
+    //(0,1) normal distribution
+    std::normal_distribution<double> distribution (0.0,1.0);
+
+    for (int i = 0; i < len; ++i) {
+        pose_set[i] = distribution(generator) * 0.2;
+    }
 }
 
 void Obj_Loader::find_center() {
