@@ -14,7 +14,7 @@ set(EIGEN_DIRS "/Users/zhaozheheng/nanogui/ext/eigen/")
 set(GLM_INCLUDE_DIRS "/usr/local/include/")
 set(NANOGUI_LIBS "/Users/zhaozheheng/nanogui/lib")
 
-set(SMPL_PART code/Load_SMPL.h code/Posemapper.h code/lbs.h)
+set(SMPL_PART code/Load_SMPL.h code/Posemapper.h code/lbs.h code/Load_FLAME.h)
 set(RENDER_PART code/main.cpp code/Shader.h glad.c code/Obj_Loader.cpp code/Obj_Loader.h code/Renderer.cpp code/Renderer.h code/Lighting.h code/Camera.h code/Material.h)
 
 set(SOURCE_FILES ${SMPL_PART} ${RENDER_PART})

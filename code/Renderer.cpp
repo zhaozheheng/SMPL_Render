@@ -71,9 +71,11 @@ void Renderer::nanogui_init(GLFWwindow *window) {
     FormHelper *gui_5 = new FormHelper(screen);
 //    ref<Window> nanoguiWindow_1 = gui_1->addWindow(Eigen::Vector2i(0, 0), "Model & Camera");
 //    ref<Window> nanoguiWindow_2 = gui_2->addWindow(Eigen::Vector2i(200, 0), "Light");
-    ref<Window> nanoguiWindow_3 = gui_3->addWindow(Eigen::Vector2i(0, 0), "BlendShape 1");
-    ref<Window> nanoguiWindow_4 = gui_4->addWindow(Eigen::Vector2i(165, 0), "BlendShape 2");
-    ref<Window> nanoguiWindow_5 = gui_5->addWindow(Eigen::Vector2i(330, 0), "BlendShape 3");
+//    ref<Window> nanoguiWindow_3 = gui_3->addWindow(Eigen::Vector2i(0, 0), "BlendShape 1");
+//    ref<Window> nanoguiWindow_4 = gui_4->addWindow(Eigen::Vector2i(165, 0), "BlendShape 2");
+//    ref<Window> nanoguiWindow_5 = gui_5->addWindow(Eigen::Vector2i(330, 0), "BlendShape 3");
+
+    ref<Window> nanoguiWindow_5 = gui_5->addWindow(Eigen::Vector2i(0, 0), "BlendShape");
 
 //    gui_1->addGroup("Load SMPL");
 //    gui_1->addButton("Generate", []() {is_reload_model = true;});
@@ -130,29 +132,29 @@ void Renderer::nanogui_init(GLFWwindow *window) {
 //    gui_3->addGroup("Shape");
 //    double shape = 1.0;
 //    gui_3->addVariable("s1", shape)->setSpinnable(true);
-    gui_3->addGroup("Pose");
-    for (int i = 0; i < 33; ++i) {
-        gui_3->addVariable(std::to_string(i + 1), obj_loader.pose_set[i])->setSpinnable(true);
-    }
-
-    gui_4->addGroup("Pose");
-    for (int i = 33; i < 66; ++i) {
-        gui_4->addVariable(std::to_string(i + 1), obj_loader.pose_set[i])->setSpinnable(true);
-    }
-
-    gui_5->addGroup("Pose");
-    for (int i = 66; i < 78; ++i) {
-        gui_5->addVariable(std::to_string(i + 1), obj_loader.pose_set[i])->setSpinnable(true);
-    }
-    gui_5->addGroup("Random");
-    gui_5->addButton("Random Pose", [this]() {
-        obj_loader.get_ran_pose();
-        int len = sizeof(obj_loader.pose_set) / sizeof(obj_loader.pose_set[0]);
-        for (int i = 0; i < len; ++i) {
-            std::cout << obj_loader.pose_set[i] << " ";
-        }
-        std::cout << std::endl;
-    });
+//    gui_3->addGroup("Pose");
+//    for (int i = 0; i < 33; ++i) {
+//        gui_3->addVariable(std::to_string(i + 1), obj_loader.pose_set[i])->setSpinnable(true);
+//    }
+//
+//    gui_4->addGroup("Pose");
+//    for (int i = 33; i < 66; ++i) {
+//        gui_4->addVariable(std::to_string(i + 1), obj_loader.pose_set[i])->setSpinnable(true);
+//    }
+//
+//    gui_5->addGroup("Pose");
+//    for (int i = 66; i < 78; ++i) {
+//        gui_5->addVariable(std::to_string(i + 1), obj_loader.pose_set[i])->setSpinnable(true);
+//    }
+//    gui_5->addGroup("Random");
+//    gui_5->addButton("Random Pose", [this]() {
+//        obj_loader.get_ran_pose();
+//        int len = sizeof(obj_loader.pose_set) / sizeof(obj_loader.pose_set[0]);
+//        for (int i = 0; i < len; ++i) {
+//            std::cout << obj_loader.pose_set[i] << " ";
+//        }
+//        std::cout << std::endl;
+//    });
     gui_5->addGroup("Load SMPL");
     gui_5->addButton("Generate", []() {is_reload_model = true;});
 

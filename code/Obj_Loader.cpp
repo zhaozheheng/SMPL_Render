@@ -7,6 +7,7 @@
 #include "Obj_Loader.h"
 
 #include "Load_SMPL.h"
+#include "Load_FLAME.h"
 
 glm::vec3 cubePositions[] = {
 
@@ -41,35 +42,73 @@ Obj_Loader::~Obj_Loader() {
 }
 
 void Obj_Loader::load_obj() {
-    smpl_model model;
+    smpl_model smpl;
     handmodel hand_l, hand_r;
-    loadModel(model, hand_l, hand_r, pose_set);
+    flame_model flame;
+    loadModel(smpl, hand_l, hand_r, pose_set);
+    loadFlame(flame);
 
     this->vertices.clear();
     std::vector<glm::vec3> positions;
 
-    for (int i = 0; i < model.model.rows; ++i) {
+    for (int i = 0; i < smpl.model.rows; ++i) {    // get SMPL vertices
         glm::vec3 vert_pos;
-        vert_pos[0] = model.model.at<double>(i, 0);
-        vert_pos[1] = model.model.at<double>(i, 1);
-        vert_pos[2] = model.model.at<double>(i, 2);
+        vert_pos[0] = smpl.model.at<double>(i, 0);
+        vert_pos[1] = smpl.model.at<double>(i, 1);
+        vert_pos[2] = smpl.model.at<double>(i, 2);
         positions.push_back(vert_pos);
     }
 
-    for (int i = 0; i < model.f.rows; ++i) {
+    Mat diff;
+    diff = smpl.J.row(12) - flame.J.row(0);
+    std::cout << "diff: " << diff << std::endl;
+
+    for (int i = 0; i < flame.model.rows; ++i) {    // get FLAME vertices
+        glm::vec3 vert_pos;
+        vert_pos[0] = flame.model.at<double>(i, 0) + diff.at<double>(0, 0);
+        vert_pos[1] = flame.model.at<double>(i, 1) + diff.at<double>(0, 1);
+        vert_pos[2] = flame.model.at<double>(i, 2) + diff.at<double>(0, 2);
+        positions.push_back(vert_pos);
+    }
+
+    for (int i = 0; i < smpl.f.rows; ++i) {    // get SMPL faces
         Vertex vertex_0;
-        vertex_0.Position = positions[model.f.at<double>(i, 0)];
+        vertex_0.Position = positions[smpl.f.at<double>(i, 0)];
         Vertex vertex_1;
-        vertex_1.Position = positions[model.f.at<double>(i, 1)];
+        vertex_1.Position = positions[smpl.f.at<double>(i, 1)];
         Vertex vertex_2;
-        vertex_2.Position = positions[model.f.at<double>(i, 2)];
+        vertex_2.Position = positions[smpl.f.at<double>(i, 2)];
         this->vertices.push_back(vertex_0);
         this->vertices.push_back(vertex_1);
         this->vertices.push_back(vertex_2);
     }
 
+    for (int i = 0; i < flame.f.rows; ++i) {    // get FLAME faces
+        Vertex vertex_0;
+        vertex_0.Position = positions[flame.f.at<double>(i, 0) + smpl.model.rows];
+        Vertex vertex_1;
+        vertex_1.Position = positions[flame.f.at<double>(i, 1) + smpl.model.rows];
+        Vertex vertex_2;
+        vertex_2.Position = positions[flame.f.at<double>(i, 2) + smpl.model.rows];
+        this->vertices.push_back(vertex_0);
+        this->vertices.push_back(vertex_1);
+        this->vertices.push_back(vertex_2);
+    }
+
+//    for (int i = 0; i < smpl.J.rows; ++i) {
+//        glm::vec3 vert_pos;
+//        vert_pos[0] = smpl.J.at<double>(i, 0);
+//        vert_pos[1] = smpl.J.at<double>(i, 1);
+//        vert_pos[2] = smpl.J.at<double>(i, 2);
+//        positions.push_back(vert_pos);
+//    }
+
     std::cout << "vertiecs size is: " << this->vertices.size() << std::endl;
     std::cout << "position size is: " << positions.size() << std::endl;
+//    std::cout << "smpl head is: " << smpl.J << std::endl;
+//    std::cout << "flame head is: " << flame.J << std::endl;
+//    std::cout << "smpl trans is: " << smpl.trans << std::endl;
+//    std::cout << "flame trans is: " << flame.trans << std::endl;
 }
 
 void Obj_Loader::setup_model() {
@@ -128,6 +167,7 @@ void Obj_Loader::draw_object(Shader &shader, Object_Mode render_mode, Culling_Mo
         if (render_mode == POINT)
             glDrawArrays(GL_POINTS, 0, this->vertices.size());
         if (render_mode == TRIANGLE) {
+//            glDrawArrays(GL_LINES, 0, this->vertices.size());
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             glDrawArrays(GL_TRIANGLES, 0, this->vertices.size());
         }

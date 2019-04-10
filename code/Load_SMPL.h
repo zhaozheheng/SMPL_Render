@@ -39,7 +39,7 @@ struct handmodel
     Mat hands_mean;
 };
 
-void loadModel(smpl_model &model, handmodel &hand_l, handmodel &hand_r, double pose_set[78]) {
+void loadModel(smpl_model &smpl, handmodel &hand_l, handmodel &hand_r, double pose_set[78]) {
     //std::cout << "Hello, World!" << std::endl;
     FileStorage fs("data/SMPLH_female.yml", cv::FileStorage::READ);
     Mat J_regressor_prior, f, J_regressor, kintree_table, J, weights_prior, weights, vert_sym_idxs, posedirs,
@@ -250,7 +250,7 @@ void loadModel(smpl_model &model, handmodel &hand_l, handmodel &hand_r, double p
     {
         vj.Jtr.row(i) += trans.t();
     }
-    //std::cout << "after_v: " << vj.v.size << "      after_Jtr: " << vj.Jtr.size << std::endl;
+//    std::cout << "after_v: " << vj.v.size << "      after_Jtr: " << vj.Jtr.size << std::endl;
     //vj.v += trans;
 
     /*std::cout << "J_regressor_prior: " << J_regressor_prior.size << std::endl;
@@ -265,23 +265,23 @@ void loadModel(smpl_model &model, handmodel &hand_l, handmodel &hand_r, double p
     std::cout << "v_template: " << v_template.size << std::endl;
     std::cout << "shape: " << shapedirs.size << " with " << shapedirs.channels() << " channels." << std::endl;*/
 
-    model.model = vj.v;
+    smpl.model = vj.v;
 //    model.J_regressor_prior = J_regressor_prior;
-    model.pose = pose_coeffs;
-    model.f = f;
-    model.J_regressor = J_regressor;
-    model.betas = betas;
-    model.kintree_table = kintree_table;
-    model.J = J;
-    model.v_shaped = v_shaped;
+    smpl.pose = pose_coeffs;
+    smpl.f = f;
+    smpl.J_regressor = J_regressor;
+    smpl.betas = betas;
+    smpl.kintree_table = kintree_table;
+    smpl.J = vj.Jtr;
+    smpl.v_shaped = v_shaped;
 //    model.weights_prior = weights_prior;
-    model.trans = trans;
-    model.v_posed = v_posed;
-    model.weights = weights;
+    smpl.trans = trans;
+    smpl.v_posed = v_posed;
+    smpl.weights = weights;
 //    model.vert_sym_idxs = vert_sym_idxs;
-    model.posedirs = posedirs;
-    model.v_template = v_template;
-    model.shapedirs = shapedirs;
+    smpl.posedirs = posedirs;
+    smpl.v_template = v_template;
+    smpl.shapedirs = shapedirs;
 
 //    std::cout << pose << std::endl;
 //    std::cout << "----------------------------------------------------------------------------------------------------------" << std::endl;
